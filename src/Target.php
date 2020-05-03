@@ -57,7 +57,7 @@ class Target extends \yii\log\Target
             ];
 
             if ($context instanceof \Throwable || $context instanceof \Exception) {
-                $this->sentry->captureException($context, $data);
+                $this->sentry->captureException($context);
                 continue;
             } elseif (isset($context['msg'])) {
                 $data['message'] = $context['msg'];
@@ -75,7 +75,7 @@ class Target extends \yii\log\Target
                 }
             }
 
-            $this->sentry->capture($data, $traces);
+            $this->sentry->capture($data);
         }
     }
 

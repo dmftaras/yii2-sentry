@@ -16,50 +16,59 @@ class Component extends \yii\base\Component
 
     /**
      * @var string Sentry DSN
-     * @note this is ignored if [[client]] is a Raven client instance.
      */
     public $dsn;
 
     /**
+     * @var string app release
+     */
+    public $release;
+
+    /**
      * @var string environment name
-     * @note this is ignored if [[client]] is a Raven client instance.
      */
     public $environment = 'production';
 
     public function init()
     {
-        if (!$this->enabled) {
-            return;
+        if ($this->enabled) {
+            \Sentry\init([
+                'dsn' => $this->dsn,
+                'environment' => $this->environment,
+                'release'   => $this->release
+            ]);
         }
 
-        \Sentry\init([
-            'dsn'           => $this->dsn,
-            'environment'   => $this->environment
-        ]);
+        return $this;
     }
 
     public function captureMessage(string $message, ?Severity $level = null): ?string
     {
-        return \Sentry\captureMessage($message, $level);
+        if ($this->enabled)
+            return \Sentry\captureMessage($message, $level);
     }
 
     public function captureException(\Throwable $exception): ?string
     {
-        return \Sentry\captureException($exception);
+        if ($this->enabled)
+            return \Sentry\captureException($exception);
     }
 
     public function capture(array $payload): ?string
     {
-        return \Sentry\captureEvent($payload);
+        if ($this->enabled)
+            return \Sentry\captureEvent($payload);
     }
 
     public function configureScope(callable $callback): void
     {
-        \Sentry\configureScope($callback);
+        if ($this->enabled)
+            \Sentry\configureScope($callback);
     }
 
     public function withScope(callable $callback): void
     {
-        \Sentry\withScope($callback);
+        if ($this->enabled)
+            \Sentry\withScope($callback);
     }
 }
