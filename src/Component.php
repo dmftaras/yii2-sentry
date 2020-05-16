@@ -53,7 +53,13 @@ class Component extends \yii\base\Component
         return $this;
     }
 
-    public function captureMessage(string $message, ?Severity $level = null): ?string
+    /**
+     * Capture message
+     * @param string $message
+     * @param Severity|null $level
+     * @return string|null
+     */
+    public function captureMessage(string $message, ?Severity $level = null)
     {
         if ($this->enabled) {
             $this->_trigger(__FUNCTION__);
@@ -61,7 +67,12 @@ class Component extends \yii\base\Component
         }
     }
 
-    public function captureException(\Throwable $exception): ?string
+    /**
+     * Capture exception
+     * @param \Throwable $exception
+     * @return string|null
+     */
+    public function captureException(\Throwable $exception)
     {
         if ($this->enabled) {
             $this->_trigger(__FUNCTION__);
@@ -69,7 +80,12 @@ class Component extends \yii\base\Component
         }
     }
 
-    public function capture(array $payload): ?string
+    /**
+     * Capture data
+     * @param array $payload
+     * @return string|null
+     */
+    public function capture(array $payload)
     {
         if ($this->enabled) {
             $this->_trigger(__FUNCTION__);
@@ -77,13 +93,13 @@ class Component extends \yii\base\Component
         }
     }
 
-    public function configureScope(callable $callback): void
+    public function configureScope(callable $callback)
     {
         if ($this->enabled)
             \Sentry\configureScope($callback);
     }
 
-    public function withScope(callable $callback): void
+    public function withScope(callable $callback)
     {
         if ($this->enabled)
             \Sentry\withScope($callback);
